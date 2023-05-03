@@ -1,4 +1,17 @@
-let state;
+// let state;
+function createStore() {
+  let state;
+
+  function dispatch(action) {
+    state = reducer(state, action);
+    render();
+  }
+  function getState() {
+    return state;// able to store current state of our value
+  }
+
+  return { dispatch, getState } // this is a store cause the fi=unction returns a JS object
+}
 
 function reducer(state = { count: 0 }, action) {
   switch (action.type) {
@@ -10,19 +23,19 @@ function reducer(state = { count: 0 }, action) {
   }
 }
 
-function dispatch(action) {
-  state = reducer(state, action);
-  render();
-}
+
 
 function render() {
   let container = document.getElementById("container");
-  container.textContent = state.count;
+  container.textContent = store.getState().count;
 }
 
-dispatch({ type: "@@INIT" });
+let store = createStore();
+store.dispatch({ type: "INIT" }) //using a specific method inside Create store function 
+
+// dispatch({ type: "@@INIT" });
 let button = document.getElementById("button");
 
 button.addEventListener("click", function () {
-  dispatch({ type: "counter/increment" });
+  store.dispatch({ type: "counter/increment" });
 });
